@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Island Breeze Smoke House - Menu & Ordering</title>
+    <script src="https://web.squarecdn.com/v1/square.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Component */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-bottom: 4px solid #ffb300;
+            padding-bottom: 15px;
+            margin-bottom: 10px;
+        }
+
+        .location {
+            color: #ccc;
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+
+        .phone {
+            display: inline-block;
+            color: #ffb300;
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 15px;
+            transition: color 0.2s;
+        }
+
+        .phone:hover {
+            color: #fff;
+        }
+
+        .status-ribbon {
+            background-color: #2c2c2c;
+            border-left: 4px solid #ffb300;
+            padding: 15px 20px;
+            display: inline-block;
+            margin-top: 15px;
+            border-radius: 4px;
+        }
+
+        .status-ribbon.active {
+            color: #90EE90;
+        }
+
+        /* Order Type Toggle */
+        .order-type-selector {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .order-type-selector label {
+            margin: 0 20px;
+            font-size: 1.1em;
+            cursor: pointer;
+        }
+
+        .order-type-selector input[type="radio"] {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        /* Menu Grid */
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #ffb300;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #d32f2f;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .menu-item {
+            background-color: #2c2c2c;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid #3a3a3a;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(255, 179, 0, 0.2);
+        }
+
+        .menu-item-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #ffb300, #d32f2f);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .menu-item-content {
+            padding: 20px;
+        }
+
+        .menu-item-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .menu-item-desc {
+            font-size: 0.9em;
+            color: #bbb;
+            margin-bottom: 12px;
+        }
+
+        .menu-item-price {
+            font-size: 1.4em;
+            color: #ffb300;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .quantity-selector button {
+            background-color: #ffb300;
+            color: #1a1a1a;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: background-color 0.2s;
+        }
+
+        .quantity-selector button:hover {
+            background-color: #d32f2f;
+            color: #fff;
+        }
+
+        .quantity-display {
+            min-width: 30px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .add-to-cart-btn {
+            width: 100%;
+            background-color: #ffb300;
+            color: #1a1a1a;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 1em;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: #d32f2f;
+            color: #fff;
+        }
+
+        .add-to-cart-btn:disabled {
+            background-color: #666;
+            cursor: not-allowed;
+        }
+
+        /* Delivery Address Input */
+        .delivery-section {
+            background-color: #2c2c2c;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+            border-left: 4px solid #ffb300;
+        }
+
+        .delivery-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #ffb300;
+        }
+
+        .delivery-section input,
+        .delivery-section textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            background-color: #1a1a1a;
+            border: 1px solid #ffb300;
+            border-radius: 4px;
+            color: #fff;
+            font-family: inherit;
+        }
+
+        .delivery-section input:focus,
+        .delivery-section textarea:focus {
+            outline: none;
+            border-color: #d32f2f;
+            box-shadow: 0 0 8px rgba(211, 47, 47, 0.3);
+        }
+
+        /* Cart Summary */
+        .cart-summary {
+            background-color: #2c2c2c;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 30px 0;
+            border-top: 3px solid #ffb300;
+        }
+
+        .cart-summary h2 {
+            margin-bottom: 20px;
+            color: #ffb300;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #3a3a3a;
+            color: #ccc;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-remove {
+            background: none;
+            border: none;
+            color: #d32f2f;
+            cursor: pointer;
+            padding: 0;
+            font-size: 0.9em;
+            margin-left: 15px;
+        }
+
+        .cart-item-remove:hover {
+            color: #fff;
+        }
+
+        .cart-empty {
+            color: #bbb;
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            font-size: 1.1em;
+        }
+
+        .summary-row.total {
+            border-top: 2px solid #ffb300;
+            padding-top: 15px;
+            color: #ffb300;
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+
+        .delivery-fee-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            color: #d32f2f;
+        }
+
+        .delivery-fee-line.free {
+            color: #90EE90;
+        }
+
+        .delivery-nudge {
+            background-color: #d32f2f;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 12px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* Checkout Section */
+        .checkout-section {
+            background-color: #2c2c2c;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 30px 0;
+            border: 2px solid #ffb300;
+        }
+
+        .checkout-section h2 {
+            margin-bottom: 20px;
+            color: #ffb300;
+        }
+
+        .square-container {
+            margin-bottom: 20px;
+        }
+
+        #sq-cardNumber,
+        #sq-expiration,
+        #sq-cvv {
+            height: 45px;
+            border-radius: 4px;
+            background-color: #1a1a1a;
+            border: 1px solid #ffb300;
+            color: #fff;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+
+        .checkout-button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .checkout-button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .checkout-button.submit {
+            background-color: #ffb300;
+            color: #1a1a1a;
+        }
+
+        .checkout-button.submit:hover:not(:disabled) {
+            background-color: #d32f2f;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .checkout-button.cancel {
+            background-color: #d32f2f;
+            color: #fff;
+        }
+
+        .checkout-button.cancel:hover {
+            background-color: #ffb300;
+            color: #1a1a1a;
+        }
+
+        .checkout-button:disabled {
+            background-color: #666;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .processing-message {
+            text-align: center;
+            color: #ffb300;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        /* Response Messages */
+        .response-container {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .response-container.success {
+            background-color: #1a4d1a;
+            color: #90EE90;
+            border-left: 4px solid #90EE90;
+        }
+
+        .response-container.error {
+            background-color: #4d1a1a;
+            color: #ff6b6b;
+            border-left: 4px solid #d32f2f;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: #2c2c2c;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            border: 2px solid #ffb300;
+        }
+
+        .modal-content h2 {
+            color: #ffb300;
+            margin-bottom: 15px;
+        }
+
+        .modal-content p {
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+        }
+
+        .modal-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        .modal-buttons button.primary {
+            background-color: #ffb300;
+            color: #1a1a1a;
+        }
+
+        .modal-buttons button.primary:hover {
+            background-color: #d32f2f;
+            color: #fff;
+        }
+
+        .modal-buttons button.secondary {
+            background-color: #555;
+            color: #fff;
+        }
+
+        .modal-buttons button.secondary:hover {
+            background-color: #777;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .checkout-button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Component -->
+        <header>
+            <h1>ISLAND BREEZE SMOKE HOUSE</h1>
+            <div class="location">633 Mills St, Watertown, NY</div>
+            <a href="tel:3158162593" class="phone">(315) 816-2593</a>
+            <div class="status-ribbon active">🔥 Smoking now — orders open</div>
+        </header>
+
+        <!-- Order Type Selector -->
+        <div class="order-type-selector">
+            <label>
+                <input type="radio" name="orderType" value="PICKUP" checked> PICKUP
+            </label>
+            <label>
+                <input type="radio" name="orderType" value="DELIVERY"> DELIVERY
+            </label>
+        </div>
+
+        <!-- Delivery Address Section -->
+        <div class="delivery-section" id="deliverySection" style="display: none;">
+            <label for="deliveryAddress">📍 Delivery Address</label>
+            <input type="text" id="deliveryAddress" placeholder="Street address">
+            <input type="text" id="deliveryCity" placeholder="City">
+            <input type="text" id="deliveryZip" placeholder="ZIP code">
+            <textarea id="deliveryNotes" placeholder="Special delivery instructions (optional)"></textarea>
+        </div>
+
+        <!-- Menu Sections -->
+        <!-- Full Yaad Meals -->
+        <div class="section">
+            <h2 class="section-title">Full Yaad Meals</h2>
+            <div class="menu-grid" id="fullYaadGrid"></div>
+        </div>
+
+        <!-- Sausage Specials -->
+        <div class="section">
+            <h2 class="section-title">Sausage Specials</h2>
+            <div class="menu-grid" id="sausageGrid"></div>
+        </div>
+
+        <!-- Handhelds -->
+        <div class="section">
+            <h2 class="section-title">Handhelds</h2>
+            <div class="menu-grid" id="handheldsGrid"></div>
+        </div>
+
+        <!-- Singles & Meat Plates -->
+        <div class="section">
+            <h2 class="section-title">Singles & Meat Plates</h2>
+            <div class="menu-grid" id="singlesGrid"></div>
+        </div>
+
+        <!-- Loaded Fries -->
+        <div class="section">
+            <h2 class="section-title">Loaded Fries</h2>
+            <div class="menu-grid" id="friesGrid"></div>
+        </div>
+
+        <!-- Brisket Bread -->
+        <div class="section">
+            <h2 class="section-title">Brisket Bread (Pizza-Style)</h2>
+            <div class="menu-grid" id="brisketBreadGrid"></div>
+        </div>
+
+        <!-- Di Sidez & Drinks -->
+        <div class="section">
+            <h2 class="section-title">Di Sidez & Drinks</h2>
+            <div class="menu-grid" id="drinksGrid"></div>
+        </div>
+
+        <!-- Special Catering -->
+        <div class="section">
+            <h2 class="section-title">Flagship Catering Special</h2>
+            <div class="menu-grid" id="cateringGrid"></div>
+        </div>
+
+        <!-- Cart Summary -->
+        <div class="cart-summary">
+            <h2>🛒 Your Order</h2>
+            <div id="cartItems" class="cart-empty">Your cart is empty</div>
+            <div style="margin-top: 20px; border-top: 1px solid #3a3a3a; padding-top: 15px;">
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span id="subtotal">$0.00</span>
+                </div>
+                <div class="delivery-fee-line" id="deliveryFeeLine" style="display: none;">
+                    <span>Delivery Fee:</span>
+                    <span id="deliveryFee">$5.00</span>
+                </div>
+                <div id="deliveryNudge" class="delivery-nudge" style="display: none;"></div>
+                <div class="summary-row total">
+                    <span>TOTAL:</span>
+                    <span id="total">$0.00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checkout Section -->
+        <div class="checkout-section">
+            <h2>💳 Secure Checkout (Production)</h2>
+            <form id="checkoutForm">
+                <div class="square-container">
+                    <div id="sq-cardNumber"></div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div id="sq-expiration"></div>
+                        <div id="sq-cvv"></div>
+                    </div>
+                </div>
+
+                <div class="checkout-button-group">
+                    <button type="submit" class="checkout-button submit" id="submitButton">
+                        Complete Order
+                    </button>
+                    <button type="button" class="checkout-button cancel" id="cancelButton">
+                        Clear Cart
+                    </button>
+                </div>
+
+                <div class="processing-message" id="processingMessage" style="display: none;">
+                    Processing your order...
+                </div>
+                <div class="response-container" id="responseContainer"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <h2>✅ Order Confirmed!</h2>
+            <p id="confirmationMessage"></p>
+            <div class="modal-buttons">
+                <button class="primary" onclick="closeConfirmationModal()">Great!</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // SQUARE SDK PRODUCTION CONFIGURATION
+        // ============================================
+        const SQUARE_CONFIG = {
+            appId: 'sq0idp-CudmRRZIaL8koxvGSCKYiw',
+            locationId: 'LDYM9Q8T2VG76',
+            environment: 'PRODUCTION'
+        };
+
+        console.log('🔒 Square SDK Configuration: PRODUCTION MODE');
+        console.log(`✅ Script: https://web.squarecdn.com/v1/square.js`);
+        console.log(`✅ App ID: ${SQUARE_CONFIG.appId}`);
+        console.log(`✅ Location ID: ${SQUARE_CONFIG.locationId}`);
+
+        // Fallback Catalog Database
+        const FALLBACK_CATALOG = [
+            // Full Yaad Meals
+            { name: "Full Yaad Meal (1 Meat)", price: 13.00, desc: "Includes 3 sides and a can soda", category: "Full Yaad Meals", photo_url: "" },
+            { name: "Full Yaad Meal (2 Meat)", price: 19.50, desc: "Includes 3 sides and a can soda", category: "Full Yaad Meals", photo_url: "" },
+            { name: "Full Yaad Meal (3 Meat)", price: 26.00, desc: "Includes 3 sides and a can soda", category: "Full Yaad Meals", photo_url: "" },
+            { name: "Full Yaad Meal (Pile On)", price: 30.00, desc: "All meat options. Includes 3 sides and a can soda", category: "Full Yaad Meals", photo_url: "" },
+
+            // Sausage Specials
+            { name: "Single Sausage", price: 3.00, desc: "Smoked link slice", category: "Sausage Specials", photo_url: "" },
+            { name: "Sausage w/ Coleslaw & Soda", price: 4.50, desc: "Or substitute soda with any standard side", category: "Sausage Specials", photo_url: "" },
+            { name: "Sausage w/ Premium Side", price: 5.00, desc: "Mac salad, baked beans, or Jamaican rice", category: "Sausage Specials", photo_url: "" },
+
+            // Handhelds
+            { name: "Chicken Filling", price: 3.50, desc: "Wrap, Empanada, Quesadilla, or Sliders setup", category: "Handhelds", photo_url: "" },
+            { name: "Chicken Filling (2 for)", price: 6.25, desc: "Bundle discount pricing for two items", category: "Handhelds", photo_url: "" },
+            { name: "Brisket Filling", price: 5.00, desc: "Wrap, Empanada, Quesadilla, or Sliders setup", category: "Handhelds", photo_url: "" },
+            { name: "Brisket Filling (2 for)", price: 8.50, desc: "Bundle discount pricing for two items", category: "Handhelds", photo_url: "" },
+            { name: "Sausage Filling", price: 4.00, desc: "Wrap, Empanada, Quesadilla, or Sliders setup", category: "Handhelds", photo_url: "" },
+            { name: "Sausage Filling (2 for)", price: 7.00, desc: "Bundle discount pricing for two items", category: "Handhelds", photo_url: "" },
+
+            // Singles & Meat Plates
+            { name: "Brisket Slice", price: 3.75, desc: "Limit 1 per customer. Includes roll and slaw", category: "Singles & Meat Plates", photo_url: "" },
+            { name: "Chicken Leg", price: 3.00, desc: "Includes roll and fresh slaw accompaniment", category: "Singles & Meat Plates", photo_url: "" },
+            { name: "Chicken Thigh", price: 4.00, desc: "Includes roll and fresh slaw accompaniment", category: "Singles & Meat Plates", photo_url: "" },
+            { name: "Sausage Link", price: 3.00, desc: "Single linked smoked sausage piece", category: "Singles & Meat Plates", photo_url: "" },
+            { name: "Hot Dog", price: 2.00, desc: "Standard configuration. Add extra smoked meat top for $1.50", category: "Singles & Meat Plates", photo_url: "" },
+            { name: "Hamburger", price: 3.00, desc: "Standard juicy dynamic beef patty. Add meat top for $1.50", category: "Singles & Meat Plates", photo_url: "" },
+
+            // Loaded Fries
+            { name: "Loaded Fries (Chicken)", price: 5.00, desc: "Fresh cut crisp fries with chicken and Aloha dust", category: "Loaded Fries", photo_url: "" },
+            { name: "Loaded Fries (Sausage)", price: 6.00, desc: "Fresh cut crisp fries with sausage and Aloha dust", category: "Loaded Fries", photo_url: "" },
+            { name: "Loaded Fries (Brisket)", price: 7.00, desc: "Fresh cut crisp fries with premium brisket and Aloha dust", category: "Loaded Fries", photo_url: "" },
+
+            // Brisket Bread
+            { name: "Brisket Bread Single Slice", price: 4.50, desc: "Pizza-style open bake. Limit 1 unit per order", category: "Brisket Bread (Pizza-Style)", photo_url: "" },
+            { name: "Brisket Bread Slice + Soda", price: 5.35, desc: "Open-face single brisket bread slice paired with cold can beverage", category: "Brisket Bread (Pizza-Style)", photo_url: "" },
+
+            // Di Sidez & Drinks
+            { name: "Can Soda", price: 0.80, desc: "Chilled domestic standard canned soda selection", category: "Di Sidez & Drinks", photo_url: "" },
+            { name: "Tropical Fruit Punch (16oz)", price: 2.00, desc: "House-crafted fresh sweet tropical juice signature", category: "Di Sidez & Drinks", photo_url: "" },
+            { name: "Tropical Fruit Punch (20oz)", price: 3.00, desc: "Sized up large house-crafted tropical juice signature", category: "Di Sidez & Drinks", photo_url: "" },
+
+            // Special
+            { name: "FEED DE FAM!", price: 75.00, desc: "Feeds 6-8. Plates, large slaw, 2 large sides, sodas. NOTE: Must order 24 hours ahead.", category: "Special", photo_url: "" }
+        ];
+
+        // Global State
+        let cart = [];
+        let orderType = 'PICKUP';
+        let squareWeb = null;
+        let payments = null;
+        let cardElement = null;
+        let expirationElement = null;
+        let cvvElement = null;
+
+        // ============================================
+        // INITIALIZE SQUARE WEB PAYMENTS SDK (PRODUCTION)
+        // ============================================
+        async function initializeSquare() {
+            try {
+                squareWeb = await Square.web();
+                console.log('✅ Square Web Payments SDK loaded');
+
+                payments = await squareWeb.payments(SQUARE_CONFIG.appId, SQUARE_CONFIG.locationId);
+                console.log('✅ Payments object initialized with production credentials');
+
+                cardElement = await payments.card();
+                await cardElement.attach('#sq-cardNumber');
+                console.log('✅ Card element attached');
+
+                expirationElement = await payments.expiration();
+                await expirationElement.attach('#sq-expiration');
+                console.log('✅ Expiration element attached');
+
+                cvvElement = await payments.cvv();
+                await cvvElement.attach('#sq-cvv');
+                console.log('✅ CVV element attached');
+
+                console.log('🎉 Square Web Payments SDK initialized successfully (PRODUCTION)');
+            } catch (error) {
+                console.error('❌ Square SDK initialization failed:', error);
+                showResponse('Payment processing unavailable. Please try again later.', 'error');
+            }
+        }
+
+        // Render Menu Items
+        function renderMenuItem(item, gridId) {
+            const initials = item.name.split(' ').map(w => w[0]).join('').substring(0, 2);
+            const gridElement = document.getElementById(gridId);
+            
+            const menuItemHTML = `
+                <div class="menu-item">
+                    <img src="${item.photo_url}" alt="${item.name}" 
+                         class="menu-item-image"
+                         onerror="renderInitialsPlaceholder(this, '${item.name}')">
+                    <div class="menu-item-content">
+                        <div class="menu-item-name">${item.name}</div>
+                        <div class="menu-item-desc">${item.desc}</div>
+                        <div class="menu-item-price">$${item.price.toFixed(2)}</div>
+                        <div class="quantity-selector">
+                            <button type="button" class="qty-decrease" onclick="updateQuantity('${item.name}', -1)">−</button>
+                            <div class="quantity-display" id="qty-${item.name.replace(/\s+/g, '-')}">0</div>
+                            <button type="button" class="qty-increase" onclick="updateQuantity('${item.name}', 1)">+</button>
+                        </div>
+                        <button type="button" class="add-to-cart-btn" onclick="addToCart('${item.name}', ${item.price})">Add to Cart</button>
+                    </div>
+                </div>
+            `;
+            gridElement.innerHTML += menuItemHTML;
+        }
+
+        // Render Initials Placeholder
+        function renderInitialsPlaceholder(imgElement, itemName) {
+            const initials = itemName.split(' ').map(w => w[0]).join('').substring(0, 2);
+            imgElement.style.display = 'none';
+            const placeholder = document.createElement('div');
+            placeholder.style.cssText = `
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(135deg, #ffb300, #d32f2f);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 2.5em;
+                font-weight: bold;
+                color: rgba(255, 255, 255, 0.3);
+            `;
+            placeholder.textContent = initials;
+            imgElement.parentElement.appendChild(placeholder);
+        }
+
+        // Load Catalog and Render Menu
+        function loadMenu() {
+            const grids = {
+                'Full Yaad Meals': 'fullYaadGrid',
+                'Sausage Specials': 'sausageGrid',
+                'Handhelds': 'handheldsGrid',
+                'Singles & Meat Plates': 'singlesGrid',
+                'Loaded Fries': 'friesGrid',
+                'Brisket Bread (Pizza-Style)': 'brisketBreadGrid',
+                'Di Sidez & Drinks': 'drinksGrid',
+                'Special': 'cateringGrid'
+            };
+
+            FALLBACK_CATALOG.forEach(item => {
+                const gridId = grids[item.category];
+                if (gridId) {
+                    renderMenuItem(item, gridId);
+                }
+            });
+        }
+
+        // Update Quantity
+        let quantities = {};
+
+        function updateQuantity(itemName, delta) {
+            quantities[itemName] = (quantities[itemName] || 0) + delta;
+            if (quantities[itemName] < 0) quantities[itemName] = 0;
+            
+            const qtyDisplay = document.getElementById(`qty-${itemName.replace(/\s+/g, '-')}`);
+            if (qtyDisplay) {
+                qtyDisplay.textContent = quantities[itemName];
+            }
+        }
+
+        // Add to Cart
+        function addToCart(itemName, price) {
+            const quantity = quantities[itemName] || 0;
+            if (quantity === 0) {
+                alert('Please select a quantity first');
+                return;
+            }
+
+            for (let i = 0; i < quantity; i++) {
+                cart.push({
+                    name: itemName,
+                    price: price,
+                    quantity: 1
+                });
+            }
+
+            quantities[itemName] = 0;
+            document.getElementById(`qty-${itemName.replace(/\s+/g, '-')}`).textContent = '0';
+            updateCartDisplay();
+        }
+
+        // Get Subtotal
+        function getSubtotal() {
+            return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        }
+
+        // Update Cart Display
+        function updateCartDisplay() {
+            const cartItemsDiv = document.getElementById('cartItems');
+            const subtotal = getSubtotal();
+
+            if (cart.length === 0) {
+                cartItemsDiv.innerHTML = '<div class="cart-empty">Your cart is empty</div>';
+                document.getElementById('subtotal').textContent = '$0.00';
+                document.getElementById('total').textContent = '$0.00';
+                document.getElementById('deliveryFeeLine').style.display = 'none';
+                document.getElementById('deliveryNudge').style.display = 'none';
+                return;
+            }
+
+            let cartHTML = '';
+            const itemCounts = {};
+
+            cart.forEach((item, index) => {
+                if (!itemCounts[item.name]) {
+                    itemCounts[item.name] = { count: 0, price: item.price, index: index };
+                }
+                itemCounts[item.name].count++;
+            });
+
+            Object.entries(itemCounts).forEach(([itemName, data]) => {
+                const total = data.price * data.count;
+                cartHTML += `
+                    <div class="cart-item">
+                        <span>${itemName} x${data.count} — $${total.toFixed(2)}</span>
+                        <button class="cart-item-remove" onclick="removeFromCart('${itemName}')">Remove</button>
+                    </div>
+                `;
+            });
+
+            cartItemsDiv.innerHTML = cartHTML;
+            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+
+            const deliveryFeeLine = document.getElementById('deliveryFeeLine');
+            const deliveryNudge = document.getElementById('deliveryNudge');
+
+            if (orderType === 'DELIVERY') {
+                deliveryFeeLine.style.display = 'flex';
+
+                if (subtotal < 25.00) {
+                    const remaining = (25.00 - subtotal).toFixed(2);
+                    document.getElementById('deliveryFee').textContent = '$5.00';
+                    deliveryFeeLine.classList.remove('free');
+                    deliveryNudge.style.display = 'block';
+                    deliveryNudge.textContent = `Add $${remaining} more to get free delivery!`;
+                    document.getElementById('total').textContent = `$${(subtotal + 5.00).toFixed(2)}`;
+                } else {
+                    document.getElementById('deliveryFee').textContent = 'Free 🎉';
+                    deliveryFeeLine.classList.add('free');
+                    deliveryNudge.style.display = 'none';
+                    document.getElementById('total').textContent = `$${subtotal.toFixed(2)}`;
+                }
+            } else {
+                deliveryFeeLine.style.display = 'none';
+                deliveryNudge.style.display = 'none';
+                document.getElementById('total').textContent = `$${subtotal.toFixed(2)}`;
+            }
+        }
+
+        // Remove from Cart
+        function removeFromCart(itemName) {
+            cart = cart.filter(item => item.name !== itemName);
+            updateCartDisplay();
+        }
+
+        // Order Type Change
+        document.querySelectorAll('input[name="orderType"]').forEach(input => {
+            input.addEventListener('change', (e) => {
+                orderType = e.target.value;
+                const deliverySection = document.getElementById('deliverySection');
+                deliverySection.style.display = orderType === 'DELIVERY' ? 'block' : 'none';
+                updateCartDisplay();
+            });
+        });
+
+        // Clear Cart
+        document.getElementById('cancelButton').addEventListener('click', () => {
+            cart = [];
+            quantities = {};
+            document.querySelectorAll('.quantity-display').forEach(el => el.textContent = '0');
+            updateCartDisplay();
+        });
+
+        // ============================================
+        // CHECKOUT FORM SUBMISSION - PRODUCTION PAYMENT
+        // ============================================
+        document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (cart.length === 0) {
+                showResponse('Please add items to your cart', 'error');
+                return;
+            }
+
+            const subtotal = getSubtotal();
+            if (orderType === 'DELIVERY' && subtotal < 25.00) {
+                showResponse(`Delivery orders require a minimum of $25.00. Add $${(25.00 - subtotal).toFixed(2)} more.`, 'error');
+                return;
+            }
+
+            if (orderType === 'DELIVERY') {
+                const address = document.getElementById('deliveryAddress').value;
+                const city = document.getElementById('deliveryCity').value;
+                const zip = document.getElementById('deliveryZip').value;
+
+                if (!address || !city || !zip) {
+                    showResponse('Please fill in all delivery address fields', 'error');
+                    return;
+                }
+            }
+
+            document.getElementById('processingMessage').style.display = 'block';
+            document.getElementById('submitButton').disabled = true;
+
+            try {
+                const result = await cardElement.tokenize();
+                
+                if (result.status === 'OK') {
+                    const token = result.token.token;
+                    console.log('✅ Card tokenized successfully (Production)');
+
+                    const total = orderType === 'DELIVERY' && getSubtotal() < 25 ? getSubtotal() + 5.00 : getSubtotal();
+                    const payload = {
+                        sourceId: token,
+                        idempotencyKey: generateIdempotencyKey(),
+                        orderType: orderType,
+                        deliveryAddress: orderType === 'DELIVERY' 
+                            ? `${document.getElementById('deliveryAddress').value}, ${document.getElementById('deliveryCity').value}, ${document.getElementById('deliveryZip').value}`
+                            : null,
+                        total: Math.round(total * 100),
+                        items: cart.map(item => ({
+                            name: item.name,
+                            quantity: item.quantity,
+                            unit_price_cents: Math.round(item.price * 100)
+                        }))
+                    };
+
+                    console.log('📤 Production payment request:', { ...payload, sourceId: '***REDACTED***' });
+
+                    const response = await fetch('/api/square-create-order', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        console.log('✅ Order processed:', result);
+                        showConfirmation(result);
+                        cart = [];
+                        quantities = {};
+                        document.querySelectorAll('.quantity-display').forEach(el => el.textContent = '0');
+                        updateCartDisplay();
+                    } else {
+                        console.error('❌ Backend failed:', response.status);
+                        showResponse('Order processing failed. Please try again.', 'error');
+                    }
+                } else {
+                    console.error('❌ Tokenization failed:', result);
+                    showResponse('Card tokenization failed. Please check your card details.', 'error');
+                }
+            } catch (error) {
+                console.error('❌ Checkout error:', error);
+                showResponse('An error occurred while processing your order.', 'error');
+            } finally {
+                document.getElementById('processingMessage').style.display = 'none';
+                document.getElementById('submitButton').disabled = false;
+            }
+        });
+
+        function generateIdempotencyKey() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        function showResponse(message, type) {
+            const container = document.getElementById('responseContainer');
+            container.textContent = message;
+            container.className = `response-container ${type}`;
+            container.style.display = 'block';
+        }
+
+        function showConfirmation(result) {
+            const message = `Your order has been confirmed! Order ID: ${result.orderId || 'PENDING'}. You will receive a confirmation email shortly.`;
+            document.getElementById('confirmationMessage').textContent = message;
+            document.getElementById('confirmationModal').classList.add('show');
+        }
+
+        function closeConfirmationModal() {
+            document.getElementById('confirmationModal').classList.remove('show');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 Island Breeze Smoke House - Production Menu System Loading');
+            loadMenu();
+            initializeSquare();
+            updateCartDisplay();
+        });
+    </script>
+</body>
+</html>
